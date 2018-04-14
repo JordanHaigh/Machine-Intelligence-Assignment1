@@ -116,10 +116,14 @@ for i in range(N_EPOCHS):
     errors.append(error)
     if i % 1000 == 0:
         print(i, 'error count: ', error)
-    if error < 0.02:
+    if error < 0.01:
+        print("reached less than 0.01 > epoch: ",i, 'error count: ', error)
         break
 
 plt.plot(errors)
+plt.title("Error function for session")
+plt.xlabel("Epoch")
+plt.ylabel("Error percentage")
 plt.show()
 #
 ######################################################
@@ -135,6 +139,9 @@ classifications = round(sess.run(layer_2, feed_dict={x_: coordinates}))
 
 x, y = meshgrid(activation_range, activation_range)
 plt.scatter(x, y, c=['b' if x > 0 else 'y' for x in classifications])
+plt.title("Classification of Two Spiral Task")
+plt.xlabel("X")
+plt.ylabel("Y")
 plt.show()
 
 ################################################
