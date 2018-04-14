@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 
-def csv_to_dataframe(filename="4Spirals.txt"):
+def csv_to_dataframe(filename="spirals/4Spirals.txt"):
     df = pd.read_csv(filename, header=None, names = ["x","y","spiralid"])
     x = df.iloc[:,0:2]
     y = df.iloc[:,2:3]

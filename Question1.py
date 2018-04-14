@@ -3,7 +3,7 @@ import tensorflow as tf
 from numpy import arange, round, meshgrid, resize, math
 import matplotlib.pyplot as plt
 
-def read_dataset(filename="spiralsdataset.txt"):
+def read_dataset(filename="spirals/spiralsdataset.txt"):
     x = []
     y = []
     spiral1 = True

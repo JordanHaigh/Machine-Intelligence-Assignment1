@@ -7,7 +7,7 @@ import csv
 import math
 
 
-def read_dataset(filename="OurSpirals.csv"):
+def read_dataset(filename="spirals/OurSpirals.csv"):
     x = []
     y = []
     spiralNo = -1
