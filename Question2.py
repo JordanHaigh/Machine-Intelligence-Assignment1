@@ -65,7 +65,7 @@ for i, j in zip(x, y):
     if j == 1:
         plt.scatter(i[0], i[1], c="green")
 
-plt.show()
+#plt.show()
 
 # Create data placeholders
 # x_ is a placeholder for the inputs to the neural network
