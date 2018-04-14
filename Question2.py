@@ -17,7 +17,7 @@ def read_dataset(filename="OurSpirals.csv"):
         for row in reader:
             currentRow = row
 
-            splittedRow = currentRow[0].split(' ')
+            splittedRow = currentRow[0].split('\t')
             # list cleaner
 
             newRow = []
