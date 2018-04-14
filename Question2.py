@@ -19,63 +19,54 @@ def read_dataset(filename="OurSpirals.csv"):
 
             splittedRow = currentRow[0].split('\t')
             # list cleaner
+    x = []
+    y = []
+    spiralNo = -1
+    with open(filename) as file:
+        reader = csv.reader(file)
+        for row in reader:
+            currentRow = row
+
+            splitRow = currentRow[0].split('\t')
+            # list cleaner
 
             newRow = []
 
-            for i in range(len(splittedRow)):
-                if (not splittedRow[i] == ""):
-                    list.append(newRow, splittedRow[i])
+            for i in range(len(splitRow)):
+                if not splitRow[i] == "":
+                    list.append(newRow, splitRow[i])
 
             # print("New row ", newRow)
 
             x.append(list(map(float, newRow[:2])))
 
+            y.append(spiralNo)
 
-            temp = []
-            temp.append(spiralNo)
-            y.append(temp)
-
-
-            if(len(x) % 259 ==0):
-                spiralNo +=1;
-
-
-
-
-            #
-            # if (spiral1):
-            #     temp = []
-            #     temp.append(1)
-            #     y.append(temp)
-            # else:
-            #     temp = []
-            #     temp.append(0)
-            #     y.append(temp)
-            #     # y.append(list(0))
-            # spiral1 = not spiral1
-            # y.append(int(row[-1]))
-    # print("any decriptor ", x[0])
-
+            if len(x) % 259 == 0:
+                spiralNo += 1
     return x, y
 
 
 x, y = read_dataset()
+print(y)
 
 # for i in x:
 #     i.append(math.sin(i[0]))
 #     i.append(math.sin(i[1]))
 
-labels = {-1 : 'spiral3', 0: 'spiral2', 1: 'spiral1'}
+labels = {-1 : 'spiral1', 0: 'spiral2', 1: 'spiral3'}
+plt.figure(1)
 
-for i,j in zip(x,y):
-    if(y[0] == -1):
-        plt.scatter(x[0],x[1], "red")
-    if (y[0] == 0):
-        plt.scatter(x[0], x[1], "blue")
-    if (y[0] == 1):
-        plt.scatter(x[0], x[1], "green")
+for i, j in zip(x, y):
+    if j == -1:
+        plt.scatter(i[0], i[1], c='red')
+    if j == 0:
+        plt.scatter(i[0], i[1], c="blue")
+    if j == 1:
+        plt.scatter(i[0], i[1], c="green")
 
-plt.show()
+#plt.show()
+
 # Create data placeholders
 # x_ is a placeholder for the inputs to the neural network
 x_ = tf.placeholder(tf.float32, [None, 2])
