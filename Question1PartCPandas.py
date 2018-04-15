@@ -21,13 +21,30 @@ labels = {1: 'spiral1', 2: 'spiral2', 3: 'spiral3', 4: 'spiral4'}
 colors = {1: 'r', 2:'g', 3:'b', 4:'yellow'}
 plt.figure(1)
 
+##It works!
+#for index, rows in df.iterrows():
+#    xcoord = rows["x"]
+#    ycoord = rows["y"]
+#    spiralid = rows["spiralid"]
+#    a = int(spiralid)
+#    color = colors[a]
+#    
+#    plt.scatter(xcoord,ycoord, c=color)
+#        
+#
+
+
+
+
 
 
 svm = SVC(C=0.6, kernel="rbf", gamma=6)
-svm.fit(x, y)
+
+yarray = np.ravel(y)
+svm.fit(x, yarray)
 
 # Visualise activations
-activation_range = arange(-6,6,0.1) # interval of [-6,6) with step size 0.1
+activation_range = arange(-10,10,0.1) # interval of [-6,6) with step size 0.1
 coordinates = [(x,y) for x in activation_range for y in activation_range]
 classifications = svm.predict(coordinates)
 meshx, meshy = meshgrid(activation_range, activation_range)
@@ -48,7 +65,7 @@ classifications = svm.predict(x)
 plt.title("Predictions -  Spiral 1: Red, Spiral 2; Blue")
 plt.xlabel("X")
 plt.ylabel("Y")
-for coord, cls in zip(x,classifications):
+for coord, cls in zip(x.values.tolist(),classifications):
     #print(coord[0], coord[1], cls)
     if(cls == 0):
         plt.scatter(coord[0],coord[1],c = "red" )
@@ -62,7 +79,7 @@ plt.show()
 plt.title("Correct Predictions: Green, Incorrect Predictions: Red")
 plt.xlabel("X")
 plt.ylabel("Y")
-for coord, target, prediction in zip(x,yarray,classifications):
+for coord, target, prediction in zip(x.values.tolist(),y.values.tolist(),classifications):
     if(round(prediction) == target):
         plt.scatter(coord[0], coord[1],c = "green" )
     else:
