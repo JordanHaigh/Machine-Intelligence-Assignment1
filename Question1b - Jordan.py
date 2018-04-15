@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 
-def csv_to_dataframe(filename="spirals/4Spirals.txt"):
+def csv_to_dataframe(filename="spirals/2SpiralsRotated90.txt"):
     df = pd.read_csv(filename, header=None, names = ["x","y","spiralid"])
     x = df.iloc[:,0:2]
     y = df.iloc[:,2:3]
@@ -28,9 +28,9 @@ plt.figure(1)
 #    ycoord = rows["y"]
 #    spiralid = rows["spiralid"]
 #    color = colors[spiralid]
-#    
+#
 #    plt.scatter(xcoord,ycoord, c=color)
-#        
+#
 
 span_of_x = 4
 
@@ -94,7 +94,7 @@ for i in range(N_EPOCHS):
     errors.append(error)
     if i % 1000 == 0:
         print(i, 'error count: ', error)
-    if error < 0.01:
+    if error < 0.001:
         print("reached less than 0.01 > epoch: ",i, 'error count: ', error)
         break
 
@@ -107,7 +107,8 @@ plt.show()
 ######################################################
 #
 # Visualise activations
-activation_range = arange(-6, 6, 0.1)  # interval of [-6,6) with step size 0.1
+
+activation_range = arange(-10, 10, 0.1)  # interval of [-6,6) with step size 0.1
 
 coordinates = [(x, y) for x in activation_range for y in activation_range]
 
@@ -116,43 +117,35 @@ if span_of_x == 4:
 
 classifications = round(sess.run(layer_2, feed_dict={x_: coordinates}))
 
-x, y = meshgrid(activation_range, activation_range)
-plt.scatter(x, y, c=['b' if x > 0 else 'y' for x in classifications])
+meshx, meshy = meshgrid(activation_range, activation_range)
+plt.scatter(meshx, meshy, c=['b' if x > 0 else 'y' for x in classifications])
 plt.title("Classification of Two Spiral Task")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.show()
 
 
-################################################
-# plt.plot(errors)
-#
-#
-# def get_col(lst, col):
-#     return [row[col] for row in lst]
-#
-#
-# classifications = sess.run(outputs, feed_dict={x_: x})
 
-# for input, target, prediction in zip(x, y, classifications):
-#     print("input", input, "target", target, "prediction", prediction)
+##################################################
+classifications = round(sess.run(layer_2, feed_dict={x_: x}))
+
+plt.title("Predictions, red is spiral 1 and blue is spiral 2")
+for coord, cls in zip(x.values.tolist(),classifications):
+    #print(coord[0], coord[1], cls)
+    if(cls == 0):
+        plt.scatter(coord[0],coord[1],c = "red" )
+    else:
+        plt.scatter(coord[0],coord[1],c = "b" )
+plt.show()
+
 #
-# plt.figure(2)
-# plt.title("predictions, red is spiral 1 and blue is spiral 2")
-# for input, prediction in zip(x,classifications):
-#     if(prediction[0]<0.5):
-#         plt.scatter(input[0], input[1],c = "red" )
-#     else:
-#         plt.scatter(input[0], input[1], c = "blue")
 #
-# # plt.show()
 #
-# plt.figure(3)
-# plt.title("green points are predicted correctly")
-# for input,target, prediction in zip(x,y,classifications):
-#     if(round(prediction[0]) == target):
-#         plt.scatter(input[0], input[1],c = "green" )
-#     else:
-#         plt.scatter(input[0], input[1], c = "red")
-#
-# plt.show()
+plt.title("green points are predicted correctly")
+for coord, target, prediction in zip(x.values.tolist(),y.values.tolist(),classifications):
+    if(round(prediction[0]) == target[0]):
+        plt.scatter(coord[0], coord[1],c = "green" )
+    else:
+        plt.scatter(coord[0], coord[1], c = "red")
+
+plt.show()
