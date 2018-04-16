@@ -1,4 +1,4 @@
 /venv
 *.xml
 /.vscode
-mushrooms\mushroom_train.csv
+mushrooms/*.csv
