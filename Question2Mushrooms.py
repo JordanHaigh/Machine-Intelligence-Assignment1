@@ -1,10 +1,8 @@
 import tensorflow as tf
-from numpy import arange, round, meshgrid, math
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import Imputer, LabelEncoder
 
 headers = ["Edible/Poisonous","cap-shape","cap-surface","cap-color","bruises",
               "odor","gill-attachment","gill-spacing","gill-size",
@@ -99,16 +97,15 @@ number_validate_features = df_validate.shape[1]-1
 
 
 
-############################SKIP FOR NOW####################################
-# The data frames are written as a temporary CSV file, as we still
-# need to modify the header row to include the number of rows and
-# columns present in the training and testing CSV files.
+# The data frames are written as a temporary CSV file
+# still need to modify the header row to include the number of rows and
+# columns in the training, testing and validation files.
 df_train.to_csv('mushrooms/train_temp.csv', index=False)
 df_test.to_csv('mushrooms/test_temp.csv', index=False)
 df_validate.to_csv('mushrooms/validate_temp.csv', index=False)
 
 # Append onto the header row the information about how many
-# columns and rows are in each file as TensorFlow requires.
+# columns and rows are in each file for tensorflow dataset.
 open("mushrooms/mushroom_train.csv", "w").write(str(number_train_entries) +
                                       "," + str(number_train_features) +
                                       "," + open("mushrooms/train_temp.csv").read())
@@ -126,7 +123,6 @@ open("mushrooms/mushroom_validate.csv", "w").write(str(number_validate_entries) 
 
 
 
-##############################################################################
 # Load datasets.
 training_set = tf.contrib.learn.datasets.base.load_csv_with_header(
     filename='mushrooms/mushroom_train.csv',
@@ -148,10 +144,9 @@ validate_set = tf.contrib.learn.datasets.base.load_csv_with_header(
     target_column=0)
 
 
-#############################################################################
 # Specify that all features have real-value data
 feature_columns = [tf.contrib.layers.real_valued_column("", dimension=116)]
-
+#Modified from https://stackoverflow.com/a/42295872
 # Build 3 layer DNN with 10, 20, 10 units respectively.
 classifier = tf.contrib.learn.DNNClassifier(
     feature_columns=feature_columns,
@@ -159,36 +154,32 @@ classifier = tf.contrib.learn.DNNClassifier(
     n_classes=2,
     model_dir="/tmp/mushroom_model")
 
-################################################################################
-# Define the test inputs
+#Tensorflow comes with its own Dataset type where you are able to access data and target sections
+
+# Functions useful for input functions to classifier.fit
+def get_train_inputs():
+  x = tf.constant(training_set.data)
+  y = tf.constant(training_set.target)
+
+  return x, y
+
 def get_test_inputs():
   x = tf.constant(test_set.data)
   y = tf.constant(test_set.target)
 
   return x, y
 
-# Define the training inputs
-def get_train_inputs():
-  x = tf.constant(training_set.data)
-  y = tf.constant(training_set.target)
 
-  return x, y
-##########################################################################
-  # Fit model.
+# Fit model and run
 classifier.fit(input_fn=get_train_inputs, steps=2000)
 
-##########################################################################
-# Evaluate accuracy.
+# Evaluate accuracy of fit function
 accuracy_score = classifier.evaluate(input_fn=get_test_inputs,
                                      steps=1)["accuracy"]
 
-print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
+print("\nTest Accuracy:", accuracy_score)
 
-
-##########################################################################
-# Test on two mushroom samples.
-
-# Test on two mushroom samples.
+#Now try and run NN on validation set to confirm that it will work
 predictions = list(classifier.predict(df_validate.iloc[:,1:].values))
 
 print("New Samples, Class Predictions:    {}\n"
@@ -210,8 +201,11 @@ for i in predictions:
         poisonous +=1
 
 bary = [edible, poisonous]
-barx = ["edible","poisonous"]
+barx = ["Edible","Poisonous"]
 width=1/2
+plt.title("Classification of edible and poisonous mushrooms")
+plt.xlabel("Classification")
+plt.ylabel("Count")
 plt.bar(barx, bary, width, color="blue")
 
 
