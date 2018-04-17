@@ -150,7 +150,7 @@ validate_set = tf.contrib.learn.datasets.base.load_csv_with_header(
 
 #############################################################################
 # Specify that all features have real-value data
-feature_columns = [tf.contrib.layers.real_valued_column("", dimension=116)] #CHANGE TO 116
+feature_columns = [tf.contrib.layers.real_valued_column("", dimension=116)]
 
 # Build 3 layer DNN with 10, 20, 10 units respectively.
 classifier = tf.contrib.learn.DNNClassifier(
@@ -193,5 +193,25 @@ predictions = list(classifier.predict(df_validate.iloc[:,1:].values))
 
 print("New Samples, Class Predictions:    {}\n"
       .format(predictions))
+
+
+
+
+
+#redo predictions for bar graph
+predictions = list(classifier.predict(df.iloc[:,1:].values))
+
+edible = 0
+poisonous = 0
+for i in predictions:
+    if(i == 1):
+        edible +=1
+    else:
+        poisonous +=1
+
+bary = [edible, poisonous]
+barx = ["edible","poisonous"]
+width=1/2
+plt.bar(barx, bary, width, color="blue")
 
 
