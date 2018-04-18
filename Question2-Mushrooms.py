@@ -25,11 +25,9 @@ def csv_to_dataframe(filename="mushrooms/agaricus-lepiota.data.txt"):
 df = csv_to_dataframe()
 
 #########################
-# Entries with a '?' indicate a missing piece of data, and
-# these entries are dropped from our dataset.
+# Entries with a '?' indicate a missing piece of data
 
-#go through column and find current num
-
+#Use mean of column to replace '?'
 #Modified from https://stackoverflow.com/a/25562948
 from sklearn.base import TransformerMixin
 
