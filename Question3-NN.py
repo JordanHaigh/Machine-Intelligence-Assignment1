@@ -51,6 +51,7 @@ BATCH_SIZE = 200
 errors = []
 accuracies = []
 accuraciesEpochNo = []
+saver = tf.train.Saver()
 
 sess = tf.InteractiveSession()
 tf.global_variables_initializer().run()
@@ -69,6 +70,8 @@ for i in range(N_EPOCHS):
         accuraciesEpochNo.append(i)
 
     errors.append(error)
+save_path = saver.save(sess, "./temp/question3/ANN/Q3annSave.ckpt")
+print("Model saved in path: %s" % save_path)
 
 correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
@@ -89,5 +92,6 @@ plt.title("Accuracy function for session")
 plt.xlabel("Epoch")
 plt.ylabel("Accuracy")
 plt.show()
+
 
 
