@@ -91,4 +91,4 @@ plt.show()
 
 
 import pickle as pickle
-pickle.dump(svm, open ( './tmp/question1c/Q1cDump.txt', 'wb'))
+pickle.dump(svm, open ( './tmp/question1c/Q1cPandasDump.txt', 'wb'))

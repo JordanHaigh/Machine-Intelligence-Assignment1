@@ -95,3 +95,6 @@ for coord, target, prediction in zip(x,yarray,classifications):
         plt.scatter(coord[0], coord[1], c = "red")
 
 plt.show()
+
+import pickle as pickle
+pickle.dump(svm, open ( './tmp/question1c/Q1cOriginalDump.txt', 'wb'))
