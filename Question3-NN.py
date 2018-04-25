@@ -70,7 +70,7 @@ for i in range(N_EPOCHS):
         accuraciesEpochNo.append(i)
 
     errors.append(error)
-save_path = saver.save(sess, "./temp/question3/ANN/Q3annSave.ckpt")
+save_path = saver.save(sess, "./tmp/question3/ANN/Q3annSave.ckpt")
 print("Model saved in path: %s" % save_path)
 
 correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y_, 1))
