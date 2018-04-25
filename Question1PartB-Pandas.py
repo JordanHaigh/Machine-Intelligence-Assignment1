@@ -30,7 +30,7 @@ plt.figure(1)
 #    color = colors[spiralid]
 #
 #    plt.scatter(xcoord,ycoord, c=color)
-#
+
 
 span_of_x = 4
 
@@ -81,8 +81,13 @@ optimizer = tf.train.GradientDescentOptimizer(learning_rate=.5).minimize(cost)
 
 N_EPOCHS = 50000  # Increase the number of epochs to about 50000 to get better results. This will take some time for training.
 
+saver = tf.train.Saver()
 sess = tf.InteractiveSession()
-tf.global_variables_initializer().run()
+
+init_op = tf.global_variables_initializer()
+
+init_op.run()
+
 
 print('Training...')
 
@@ -97,6 +102,14 @@ for i in range(N_EPOCHS):
     if error < 0.001:
         print("reached less than 0.01 > epoch: ",i, 'error count: ', error)
         break
+
+save_path = saver.save(sess, "./tmp/question1b/model.ckpt")
+print("Model saved in path: %s" % save_path)
+
+tf.reset_default_graph()
+
+saver.restore(sess, "./tmp/question1b/model.ckpt")
+print("Model restored.")
 
 plt.plot(errors)
 plt.title("Error function for session")
@@ -149,3 +162,4 @@ for coord, target, prediction in zip(x.values.tolist(),y.values.tolist(),classif
         plt.scatter(coord[0], coord[1], c = "red")
 
 plt.show()
+

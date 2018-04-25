@@ -83,11 +83,14 @@ cost = tf.reduce_mean(tf.losses.mean_squared_error(labels=y_, predictions=layer_
 
 # Define optimizer and its task (minimise error function)
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=.5).minimize(cost)
-
 N_EPOCHS = 50000  # Increase the number of epochs to about 50000 to get better results. This will take some time for training.
-
+saver = tf.train.Saver()
 sess = tf.InteractiveSession()
-tf.global_variables_initializer().run()
+
+init_op = tf.global_variables_initializer()
+
+init_op.run()
+
 
 print('Training...')
 
@@ -102,6 +105,14 @@ for i in range(N_EPOCHS):
     if error < 0.01:
         print("reached less than 0.01 > epoch: ",i, 'error count: ', error)
         break
+save_path = saver.save(sess, "./tmp/question1a/model.ckpt")
+print("Model saved in path: %s" % save_path)
+
+tf.reset_default_graph()
+
+saver.restore(sess, "./tmp/question1a/model.ckpt")
+print("Model restored.")
+
 
 plt.plot(errors)
 plt.title("Error function for session")
@@ -153,3 +164,48 @@ for coord, target, prediction in zip(x,y,classifications):
         plt.scatter(coord[0], coord[1], c = "red")
 
 plt.show()
+
+
+####################################################
+#
+
+#https://www.tensorflow.org/programmers_guide/saved_model
+## Create some variables.
+#v1 = tf.get_variable("v1", shape=[3], initializer = tf.zeros_initializer)
+#v2 = tf.get_variable("v2", shape=[5], initializer = tf.zeros_initializer)
+#
+#inc_v1 = v1.assign(v1+1)
+#dec_v2 = v2.assign(v2-1)
+#
+## Add an op to initialize the variables.
+#
+#
+## Later, launch the model, initialize the variables, do some work, and save the
+## variables to disk.
+#with tf.Session() as sess:
+#  sess.run(init_op)
+#  # Do some work with the model.
+  # Save the variables to disk.
+  
+  ###################################################
+
+## Create some variables.
+#v1 = tf.get_variable("v1", shape=[3])
+#v2 = tf.get_variable("v2", shape=[5])
+#
+## Add ops to save and restore all the variables.
+#saver = tf.train.Saver()
+#
+## Later, launch the model, use the saver to restore variables from disk, and
+## do some work with the model.
+#with tf.Session() as sess:
+#  # Restore variables from disk.
+#  saver.restore(sess, "/tmp/model.ckpt")
+#  print("Model restored.")
+#  # Check the values of the variables
+#  print("v1 : %s" % v1.eval())
+#  print("v2 : %s" % v2.eval())
+  ################################################
+#  
+#  saver.restore(sess, "/tmp/model.ckpt")
+#  print("Model restored.")
