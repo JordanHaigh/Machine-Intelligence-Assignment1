@@ -43,3 +43,5 @@ print("Accuracy", accuracy)
 for target, prediction in zip(testY, predictions):
     print("target",target,"prediction",prediction)
 
+import pickle
+pickle.dump(svm, open('./tmp/question3/SVM/Q3Dump.txt', 'wb'))
